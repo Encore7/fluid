@@ -1,0 +1,6 @@
+{
+    "num_classes": 10,
+    "image_width": 28,
+    "image_height": 28,
+    "num_channels": 1
+}

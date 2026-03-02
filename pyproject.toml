@@ -1,0 +1,84 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "heterogeneous_federated_learning_with_disentangled_variational_autoencoder"
+version = "1.0.0"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.flwr.app]
+publisher = "flwrlabs"
+
+[tool.flwr.app.components]
+serverapp = "src.server_app:app"
+clientapp = "src.client_app:app"
+
+[tool.flwr.app.config]
+num-of-clients = 10
+learning-rate = 0.001
+fraction-evaluate = 1
+local-epochs = 3
+batch-size = 128
+data-loader-alpha = 1
+num-server-rounds = 100
+num-of-batches = 100
+prepare-dataset = false
+
+# Drift configuration
+drift-start-round = 35
+drift-end-round = 150
+# Drifted Client Change:
+drift-clients = "[0,1,3,4,5,6,7,8,9]"
+# Minority Drift Clients:
+# drift-clients = "[1,3,7]"
+# Majoriy Drift Clients
+# drift-clients = "[0,1,3,4,5,7,9]"
+# MNIST
+# abrupt-drift-labels-swap = '[{"label1": 1, "label2": 2},{"label1": 5, "label2": 7}]'
+# FMNIST
+    # T-shirt(0) ↔ Pullover(2)
+    # Sandal(5) ↔ Sneaker(7)
+# abrupt-drift-labels-swap = '[{"label1": 0, "label2": 2},{"label1": 5, "label2": 7}]'
+# CIFAR - 10
+    # cat(3) ↔ dog(5)
+    # deer(4) ↔ horse(7)
+# abrupt-drift-labels-swap = '[{"label1": 3, "label2": 5}, {"label1": 4, "label2": 7}]'
+
+abrupt-drift-labels-swap = '[]'
+## JSON mapping: {"round": drift_percentage} where percentage is 0.0-1.0
+# incremental-drift-rounds = '{"50": 1}'
+# Sequence
+incremental-drift-rounds = '{"35": 1, "65": 1}'
+## JSON mapping: drift, retraining, rapid-retraining, fedau, fluid, adaptive-fluid
+mode = "adaptive-fluid"
+## The settings below apply when mode is set to "adaptive-fluid" (mode = "adaptive-fluid").
+adaptive-fluid-blend-decay = 7
+
+# Paths
+logs-folder-path = "log"
+dataset-folder-path = "src/clients_dataset"
+plots-folder-path = "src/plots/sequence"
+
+# Dataset and Model Configuration
+# mnist, fashion_mnist, cifar10
+dataset-name = "mnist"
+# dataset-input-feature = "img"
+dataset-input-feature = "image"
+dataset-target-feature = "label"
+
+[tool.flwr.federations]
+default = "local-simulation"
+
+[tool.flwr.federations.local-simulation]
+options.num-supernodes = 10
+
+[tool.flwr.federations.local-simulation-gpu]
+options.num-supernodes = 10
+options.backend.client-resources.num-cpus = 2 # each ClientApp assumes to use 2CPUs
+options.backend.client-resources.num-gpus = 0.1 # at most 5 ClientApp will run in a given GPU
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = ["missing-docstring"]
