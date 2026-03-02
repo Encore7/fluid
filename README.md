@@ -10,7 +10,7 @@ Official implementation repository for concept drift adaptation experiments in F
 
 ## Paper
 
-- IEEE Xplore: https://ieeexplore.ieee.org/document/1133643
+- IEEE Xplore: https://ieeexplore.ieee.org/document/11336437
 
 > Note: The published paper covers results up to **FLUID**.  
 > The repository also contains an ongoing **Adaptive-FLUID** extension, which is **not** part of the original publication.
@@ -188,4 +188,4 @@ Notes:
 
 If you use this repository, please cite the FLUID paper from IEEE Xplore:
 
-- https://ieeexplore.ieee.org/document/1133643
+- https://ieeexplore.ieee.org/document/11336437
